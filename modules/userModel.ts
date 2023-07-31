@@ -1,5 +1,6 @@
 import { Schema, InferSchemaType } from 'mongoose';
 import mongoose from 'mongoose';
+import subscriptionModel from './subscriptionModel';
 
 const schema = new Schema({
     username: {
@@ -17,7 +18,8 @@ const schema = new Schema({
     email: {
         type: String,
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Please fill a valid email address"]
-    }
+    },
+    subscriptions: [subscriptionModel]
 });
 
 type User = InferSchemaType<typeof schema>
