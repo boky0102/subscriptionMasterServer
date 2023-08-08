@@ -1,10 +1,14 @@
-import express, {Express, Request, Response} from 'express';
+import express , {Express, Request, Response} from 'express';
 import 'dotenv/config';
 import bodyParser from 'body-parser';
 import { PrismaClient } from '@prisma/client';
 import cors from 'cors';
 import { Jwt } from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import register from './controllers/register';
+
+const router = express.Router();
+
 
 
 
@@ -13,7 +17,7 @@ var corsOptions: cors.CorsOptions = {
 }
 //CONNECTING TO DB
 
-const prisma = new PrismaClient();
+export const prisma = new PrismaClient();
 
 const port = 3000
 
@@ -28,41 +32,19 @@ app.get("/", async (req: Request,res: Response) => {
     const allUsers = await prisma.user.findMany();
     res.send(allUsers);
 })
+router.post("/register", register);
+app.use("/", router);
 
-app.post("/register", async (req: Request, res: Response) => {
+
+/* app.post("/register", async (req: Request, res: Response) => {
     try{
-        await bcrypt.hash(req.body.password, 10, async (err, hash) => {
-            if(err){
-                res.status(500).send();
-                throw(err);
-            } else{
-                const checkIfUserExists = await prisma.user.findFirst({
-                    where: {
-                        username: req.body.username
-                    }
-                })
-                if(checkIfUserExists){
-                    res.statusMessage = "User already exists";
-                    res.status(400).send();
-                } else{
-                    await prisma.user.create({
-                        data: {
-                            username: req.body.username,
-                            password: hash
-                        }
-                    })
-                    res.status(200).send();
-
-                }
-                
-            }
-        })
+        register();
 
     } catch(err){
         console.log(err);
         res.status(500).send();
     }
-})
+}) */
 
 
 app.listen(port, () => {
