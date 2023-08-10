@@ -6,6 +6,7 @@ import cors from 'cors';
 import { Jwt } from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import register from './controllers/register';
+import login from './controllers/login';
 
 const router = express.Router();
 
@@ -32,7 +33,10 @@ app.get("/", async (req: Request,res: Response) => {
     const allUsers = await prisma.user.findMany();
     res.send(allUsers);
 })
+
+
 router.post("/register", register);
+router.post("/login", login);
 app.use("/", router);
 
 
