@@ -14,7 +14,8 @@ const router = express.Router();
 
 
 var corsOptions: cors.CorsOptions = {
-    origin: 'http://localhost:5173'
+    origin: 'http://localhost:5173',
+    credentials: true
 }
 //CONNECTING TO DB
 
@@ -31,6 +32,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.get("/", async (req: Request,res: Response) => {
     const allUsers = await prisma.user.findMany();
+    console.log(req.headers);
     res.send(allUsers);
 })
 

@@ -20,7 +20,12 @@ const login = async (req: express.Request, res: express.Response, next: express.
                     if(process.env.JWT_SECRET){
 
                         const token = await jwt.sign(user.id, process.env.JWT_SECRET);
-                        res.send(token);
+                        res.cookie("jwt", token, {
+                            httpOnly: true,
+                            secure: true
+                        })
+                        
+                        res.status(200).send();
 
                     } else{
                         throw(new Error("jwt signature isn't set up"));
