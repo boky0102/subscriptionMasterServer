@@ -7,6 +7,7 @@ import { Jwt } from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import register from './controllers/register';
 import login from './controllers/login';
+import isAuthenticated from './middleware/authentication';
 
 const router = express.Router();
 
@@ -30,10 +31,9 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-app.get("/", async (req: Request,res: Response) => {
-    const allUsers = await prisma.user.findMany();
-    console.log(req.headers);
-    res.send(allUsers);
+app.get("/", isAuthenticated, async (req: Request,res: Response) => {
+    console.log(req.userId);
+    res.status(200).send();
 })
 
 
@@ -41,16 +41,6 @@ router.post("/register", register);
 router.post("/login", login);
 app.use("/", router);
 
-
-/* app.post("/register", async (req: Request, res: Response) => {
-    try{
-        register();
-
-    } catch(err){
-        console.log(err);
-        res.status(500).send();
-    }
-}) */
 
 
 app.listen(port, () => {
