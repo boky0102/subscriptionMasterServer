@@ -9,6 +9,7 @@ import register from './controllers/register';
 import login from './controllers/login';
 import isAuthenticated from './middleware/authentication';
 import homeController from './controllers/home';
+import logoutController from './controllers/logout';
 
 const router = express.Router();
 
@@ -35,6 +36,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 router.get("/", isAuthenticated, homeController);
 router.post("/register", register);
 router.post("/login", login);
+router.get("/logout", isAuthenticated, logoutController);
 app.use("/", router);
 
 
