@@ -8,6 +8,7 @@ import bcrypt from 'bcrypt';
 import register from './controllers/register';
 import login from './controllers/login';
 import isAuthenticated from './middleware/authentication';
+import homeController from './controllers/home';
 
 const router = express.Router();
 
@@ -21,7 +22,6 @@ var corsOptions: cors.CorsOptions = {
 //CONNECTING TO DB
 
 export const prisma = new PrismaClient();
-
 const port = 3000
 
 
@@ -31,12 +31,8 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-app.get("/", isAuthenticated, async (req: Request,res: Response) => {
-    console.log(req.userId);
-    res.status(200).send();
-})
 
-
+router.get("/", isAuthenticated, homeController);
 router.post("/register", register);
 router.post("/login", login);
 app.use("/", router);
