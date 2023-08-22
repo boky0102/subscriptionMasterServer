@@ -3,7 +3,7 @@ import express from "express";
 const asyncHandler = require('express-async-handler');
 import bcrypt from 'bcrypt';
 import bodyParser from "body-parser";
-import { prisma } from '../server';
+
 
 
 
@@ -11,7 +11,7 @@ import { prisma } from '../server';
 
 const register = async (req: express.Request,res: express.Response,next: express.NextFunction) => {
     try{
-        if(req.body){
+        /* if(req.body){
             console.log("request");
             await bcrypt.hash(req.body.password, 10, async (err, hash) => {
                 if(err){
@@ -31,8 +31,8 @@ const register = async (req: express.Request,res: express.Response,next: express
                             data: {
                                 username: req.body.username,
                                 password: hash
-                            }
-                        })
+                            
+                        }})
                         res.status(200).send();
         
                     }
@@ -40,7 +40,7 @@ const register = async (req: express.Request,res: express.Response,next: express
                 }
             })
     
-        }
+        } */
     
     } catch(err){
         console.log(err)

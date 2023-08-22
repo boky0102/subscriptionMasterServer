@@ -1,13 +1,12 @@
 
 import express from 'express';
-import { prisma } from '../server';
 import jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import 'dotenv/config';
 
 const login = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try{
-        if(req.body){
+        /* if(req.body){
             const { username, password } = req.body;
             const user = await prisma.user.findFirst({
                 where: {
@@ -43,7 +42,7 @@ const login = async (req: express.Request, res: express.Response, next: express.
                 res.status(400).send();
             }
 
-        }
+        } */
     } catch(err){
         console.log(err);
     }

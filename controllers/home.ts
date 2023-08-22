@@ -1,9 +1,8 @@
 import express ,{ NextFunction } from "express";
-import { prisma } from "../server";
 
 async function homeController(req: express.Request, res: express.Response, next: express.NextFunction){
     try{
-        if(req.userId && typeof(req.userId) === "string"){
+        /* if(req.userId && typeof(req.userId) === "string"){
 
             const user = await prisma.user.findFirst(
                 {
@@ -13,6 +12,7 @@ async function homeController(req: express.Request, res: express.Response, next:
                 }
             )
             if(user){
+                console.log(user);
                 res.send(user.username);
 
             } else{
@@ -23,7 +23,7 @@ async function homeController(req: express.Request, res: express.Response, next:
         } else{
             console.log("ID FOR USER ISN'T PROVIDED");
             res.status(404).send();
-        }
+        } */
 
 
 

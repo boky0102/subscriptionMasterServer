@@ -9,6 +9,8 @@ async function logoutController(req: express.Request, res: express.Response, nex
         res.status(500).send();
     }
     
+
+    
 }
 
 export default logoutController;
