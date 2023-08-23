@@ -8,7 +8,7 @@ import isAuthenticated from './middleware/authentication';
 import homeController from './controllers/home';
 import logoutController from './controllers/logout';
 import addSubscription from './controllers/addSubscription';
-import { connectToDatabase } from './srevices/database.service';
+import { connectToDatabase, collections } from './srevices/database.service';
 
 const router = express.Router();
 
@@ -35,7 +35,11 @@ connectToDatabase()
         app.use(bodyParser.urlencoded({extended: false}));
 
         app.get("/test", async (req: express.Request, res: express.Response) => {
-            
+            const users = await collections.user?.find({});
+            if(users){
+                res.status(404).send("No user")
+            }
+            res.status(200).send(users);
         })
 
 

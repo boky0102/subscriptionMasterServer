@@ -1,6 +1,8 @@
 import 'dotenv/config';
 import * as mongoDB from "mongodb";
 
+export const collections: { user?: mongoDB.Collection } = {}
+
 export async function connectToDatabase(){
     if(process.env.DATABASE_URL){
         
@@ -10,7 +12,10 @@ export async function connectToDatabase(){
 
         const db: mongoDB.Db = client.db("subscription");
 
+        const userCollection: mongoDB.Collection = db.collection("user");
 
+    collections.user = userCollection;
+        
 
     } else{
         console.log("Database url isn't set up in .env file");
@@ -18,5 +23,3 @@ export async function connectToDatabase(){
     
 
 }
-
-export const db: { db? : mongoDB.Db } = {};

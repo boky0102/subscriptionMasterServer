@@ -4,43 +4,27 @@ const asyncHandler = require('express-async-handler');
 import bcrypt from 'bcrypt';
 import bodyParser from "body-parser";
 
-
-
+import User from "../modules/user";
+import { collections } from "../srevices/database.service";
 
 
 
 const register = async (req: express.Request,res: express.Response,next: express.NextFunction) => {
     try{
-        /* if(req.body){
-            console.log("request");
-            await bcrypt.hash(req.body.password, 10, async (err, hash) => {
-                if(err){
-                    res.status(500).send();
-                    throw(err);
-                } else{
-                    const checkIfUserExists = await prisma.user.findFirst({
-                        where: {
-                            username: req.body.username
-                        }
-                    })
-                    if(checkIfUserExists){
-                        res.statusMessage = "User already exists";
-                        res.status(400).send();
-                    } else{
-                        await prisma.user.create({
-                            data: {
-                                username: req.body.username,
-                                password: hash
-                            
-                        }})
-                        res.status(200).send();
         
-                    }
-                    
-                }
-            })
-    
-        } */
+        const newUser: User = {
+            username: req.body.username,
+            password: req.body.password
+        }
+
+        if(req.body){
+            const newUserStatus = await collections.user?.insertOne(newUser);
+            console.log(newUserStatus);
+            newUserStatus ? 
+                res.status(200).send() :
+                res.status(500).send();
+            
+        }
     
     } catch(err){
         console.log(err)

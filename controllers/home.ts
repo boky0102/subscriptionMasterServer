@@ -25,6 +25,8 @@ async function homeController(req: express.Request, res: express.Response, next:
             res.status(404).send();
         } */
 
+        res.status(200).send();
+
 
 
     } catch(error){
