@@ -4,6 +4,7 @@ export default class User{
     constructor(
         public username: string,
         public password: string,
-        id: ObjectId
+        public id?: ObjectId,
+        public confirmPassword?: string,
     ) {}
 }
