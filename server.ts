@@ -9,6 +9,7 @@ import homeController from './controllers/home';
 import logoutController from './controllers/logout';
 import addSubscription from './controllers/addSubscription';
 import { connectToDatabase, collections } from './srevices/database.service';
+import { defaultErrorHandler, errorHandler } from './middleware/routesErrorHandler';
 
 const router = express.Router();
 
@@ -49,6 +50,9 @@ connectToDatabase()
         router.get("/logout", isAuthenticated, logoutController);
         router.post("/newsubscription", isAuthenticated , addSubscription);
         app.use("/", router);
+
+        app.use(errorHandler);
+        app.use(defaultErrorHandler);
 
 
 

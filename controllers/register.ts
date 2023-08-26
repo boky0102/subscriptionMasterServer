@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 
 import User from "../modules/user";
 import { collections } from "../srevices/database.service";
+import { AppError } from "../middleware/routesErrorHandler";
 
 
 
@@ -21,6 +22,7 @@ const register = async (req: express.Request,res: express.Response,next: express
             if(newUser.password === newUser.confirmPassword){
 
                 const userExists = await collections.user?.findOne({username: newUser.username});
+                console.log(userExists);
                 if(!userExists){
                 
                     const hash = await bcrypt.hash(newUser.password, 10);
@@ -39,15 +41,17 @@ const register = async (req: express.Request,res: express.Response,next: express
 
 
                 } else {
-
-                    res.statusMessage = "User already exists";
-                    res.status(404).send();
+                    throw new AppError( 400, "User already exists" );
+                    /* res.statusMessage = "User already exists";
+                    res.status(404).send(); */
                 }
 
 
             } else{
-                res.statusMessage = "Passwords don't match";
-                res.status(400).send();
+
+                throw new Error("Passwords don't match");
+                /* res.statusMessage = "Passwords don't match";
+                res.status(400).send(); */
             }
             
 
@@ -57,8 +61,7 @@ const register = async (req: express.Request,res: express.Response,next: express
         }
     
     } catch(err){
-        console.log(err)
-        res.status(400).send();
+        next(err);
     }
     
     
