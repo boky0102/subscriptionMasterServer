@@ -42,16 +42,14 @@ const register = async (req: express.Request,res: express.Response,next: express
 
                 } else {
                     throw new AppError( 400, "User already exists" );
-                    /* res.statusMessage = "User already exists";
-                    res.status(404).send(); */
+
                 }
 
 
             } else{
 
-                throw new Error("Passwords don't match");
-                /* res.statusMessage = "Passwords don't match";
-                res.status(400).send(); */
+                throw new AppError(304, "Passwords don't match");
+
             }
             
 

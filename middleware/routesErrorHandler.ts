@@ -16,16 +16,22 @@ export class AppError extends Error{
 
 }
 
-export async function errorHandler(error: AppError, req: Request, res: Response, next: NextFunction){
-
-    console.log("USLO U ERROR");
-    if(error instanceof Error){
-        next(error);
+export async function errorHandler(error: any, req: Request, res: Response, next: NextFunction){
+    try{
+        console.log("USLO U ERROR");
+        if(error instanceof Error){
+            next(error);
+        } else{
+            res.statusMessage = error.message;
+            res.status(error.statusCode);
+            res.send();
+        }
+        
+    } catch(err){
+        console.log(err);
+        res.status(500).send();
     }
     
-    res.statusMessage = error.message;
-    res.status(error.statusCode);
-    res.send();
     
     
 }
