@@ -48,7 +48,7 @@ const register = async (req: express.Request,res: express.Response,next: express
 
             } else{
 
-                throw new AppError(304, "Passwords don't match");
+                throw new AppError(300, "Password don't match");
 
             }
             

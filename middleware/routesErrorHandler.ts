@@ -18,10 +18,11 @@ export class AppError extends Error{
 
 export async function errorHandler(error: any, req: Request, res: Response, next: NextFunction){
     try{
-        console.log("USLO U ERROR");
-        if(error instanceof Error){
+
+        if(!error.statusCode){   //Checks if error has statusCode property which is undefined in defualt Error class
             next(error);
         } else{
+            console.log("USLO U ERROR");  // If error is of type AppError
             res.statusMessage = error.message;
             res.status(error.statusCode);
             res.send();
