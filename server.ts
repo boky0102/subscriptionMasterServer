@@ -36,15 +36,6 @@ connectToDatabase()
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({extended: false}));
 
-        app.get("/test", async (req: express.Request, res: express.Response) => {
-            const users = await collections.user?.find({});
-            if(users){
-                res.status(404).send("No user")
-            }
-            res.status(200).send(users);
-        })
-
-
         router.get("/", isAuthenticated, homeController);
         router.post("/register", validateUserInput, register);
         router.post("/login", login);

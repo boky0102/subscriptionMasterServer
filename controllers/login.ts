@@ -3,48 +3,24 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import 'dotenv/config';
+import { validateLoginData } from '../srevices/user.service';
+import User from '../modules/user';
 
 const login = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try{
-        /* if(req.body){
-            const { username, password } = req.body;
-            const user = await prisma.user.findFirst({
-                where: {
-                    username: username
-                }
-            });
-            if(user){
-                const passwordCheck = await bcrypt.compare(password, user.password);
-                if(passwordCheck){
-                    if(process.env.JWT_SECRET){
+        const userData : User = {
+            username: req.body.username,
+            password: req.body.password
+        };
 
-                        const token = await jwt.sign(user.id, process.env.JWT_SECRET);
-                        res.cookie("jwt", token, {
-                            httpOnly: true,
-                            secure: true
-                        })
-                        
-                        res.status(200).send();
-
-                    } else{
-                        throw(new Error("jwt signature isn't set up"));
-                        res.status(500).send();
-                        
-                    }
-                    
-                } else{
-                    res.statusMessage = "Incorrect password";
-                    res.status(400).send();
-                }
-
-            } else{
-                res.statusMessage = "Username doesn't exist";
-                res.status(400).send();
-            }
-
-        } */
+        const jwtToken = await validateLoginData(userData);
+        res.cookie("jwt", jwtToken, {
+            httpOnly: true,
+            secure: true
+        }).send();
+        
     } catch(err){
-        console.log(err);
+        next(err);
     }
     
     

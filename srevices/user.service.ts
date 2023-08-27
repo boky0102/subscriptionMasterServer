@@ -3,6 +3,8 @@ import { AppError } from "../middleware/routesErrorHandler";
 import User from "../modules/user";
 import { collections } from "./database.service";
 import bcrypt from "bcrypt";
+import jwt from 'jsonwebtoken';
+import 'dotenv/config'
 
 
 export async function validateUserInput(req: Request, res: Response, next: NextFunction){
@@ -40,6 +42,7 @@ export async function validateUserInput(req: Request, res: Response, next: NextF
     }
 }
 
+
 export async function createUser(userData: User){
     
     const userExists = await collections.user?.findOne({
@@ -59,6 +62,34 @@ export async function createUser(userData: User){
         throw new AppError(400, "User already exists");
     };
     
+}
+
+
+export async function validateLoginData(userData: User){
+    
+    const currentUser = await collections.user?.findOne({username: userData.username});
+    if(currentUser){
+        
+        const isUserValid = await bcrypt.compare(userData.password, currentUser.password);
+        if(isUserValid){
+            if(process.env.JWT_SECRET){
+                const token = await jwt.sign({
+                    userId: currentUser._id
+                }, process.env.JWT_SECRET);
+                return token;
+            } else{
+                throw new AppError(500, "Server config error");
+            }
+            
+
+        }else{
+            throw new AppError(400, "Wrong password");
+        }
+
+    } else{
+        throw new AppError(400, "User doesn't exist");
+    }
+
 }
 
 
