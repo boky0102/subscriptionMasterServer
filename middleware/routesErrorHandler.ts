@@ -22,25 +22,21 @@ export async function errorHandler(error: any, req: Request, res: Response, next
         if(!error.statusCode){   //Checks if error has statusCode property which is undefined in defualt Error class
             next(error);
         } else{
-            console.log("USLO U ERROR");  // If error is of type AppError
+              // If error is of type AppError
             res.statusMessage = error.message;
             res.status(error.statusCode);
             res.send();
         }
         
     } catch(err){
-        console.log(err);
         res.status(500).send();
     }
-    
     
     
 }
 
 
 export async function defaultErrorHandler(error: any, req: Request, res: Response, next: NextFunction){
-    console.log("Uslo u default error");
-    console.log(error.message);
     res.statusMessage = error.message;
     res.status(500);
     res.send();
