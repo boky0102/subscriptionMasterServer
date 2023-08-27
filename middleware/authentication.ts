@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
+import { AppError } from "./routesErrorHandler";
 
 async function isAuthenticated (req: express.Request, res: express.Response, next: express.NextFunction){
     try{
@@ -9,24 +10,23 @@ async function isAuthenticated (req: express.Request, res: express.Response, nex
         if(userToken && process.env.JWT_SECRET){
             jwt.verify(userToken, process.env.JWT_SECRET, (err, decoded) => {
                 if(err){
-                    console.log(err)
-                    res.status(400).send();
+                    throw new AppError(401, "Unauthorized");
                 } else{
                     if(decoded){
                         req.userId = decoded;
                         next();
+                    } else{
+                        throw new AppError(500, "JWT DECODING ERROR");
                     }
                 }
             })
         } else{
-            res.statusMessage = "cookie isn't set up";
-            res.status(400).send();
+            throw new AppError(400, "Cookie isn't set up");
         }
 
 
     } catch(error){
-        console.log(error);
-        res.status(500).send();
+        next(error);
     }
     
 }
