@@ -1,6 +1,9 @@
 import { Response, Request, NextFunction } from "express";
 import { AppError } from "../middleware/routesErrorHandler";
 import User from "../modules/user";
+import { collections } from "./database.service";
+import bcrypt from "bcrypt";
+
 
 export async function validateUserInput(req: Request, res: Response, next: NextFunction){
     try{
@@ -36,5 +39,28 @@ export async function validateUserInput(req: Request, res: Response, next: NextF
         next(error);
     }
 }
+
+export async function createUser(userData: User){
+    
+    const userExists = await collections.user?.findOne({
+        username: userData.username
+    });
+
+    if(!userExists){
+
+        const hash = await bcrypt.hash(userData.password, 10);
+        const insertedUser = await collections.user?.insertOne({
+            username: userData.username,
+            password: hash
+        })
+        
+
+    } else {
+        throw new AppError(400, "User already exists");
+    };
+    
+}
+
+
 
 

@@ -10,6 +10,7 @@ import logoutController from './controllers/logout';
 import addSubscription from './controllers/addSubscription';
 import { connectToDatabase, collections } from './srevices/database.service';
 import { defaultErrorHandler, errorHandler } from './middleware/routesErrorHandler';
+import { validateUserInput } from './srevices/user.service';
 
 const router = express.Router();
 
@@ -45,7 +46,7 @@ connectToDatabase()
 
 
         router.get("/", isAuthenticated, homeController);
-        router.post("/register", register);
+        router.post("/register", validateUserInput, register);
         router.post("/login", login);
         router.get("/logout", isAuthenticated, logoutController);
         router.post("/newsubscription", isAuthenticated , addSubscription);
