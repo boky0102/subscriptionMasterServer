@@ -1,11 +1,11 @@
 import { ObjectId } from "mongodb";
 
-export default class{
+export default class Subscription{
     constructor(
-        subscriptionName: string,
-        dateAdded: Date,
-        renewalDate: Date,
-        chargeAmount: Number,
-        category: string
+        public subscriptionName: string,
+        public dateAdded: Date,
+        public renewalDate: Date,
+        public chargeAmount: Number,
+        public category?: string
     ){}
 }

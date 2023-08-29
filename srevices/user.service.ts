@@ -73,9 +73,7 @@ export async function validateLoginData(userData: User){
         const isUserValid = await bcrypt.compare(userData.password, currentUser.password);
         if(isUserValid){
             if(process.env.JWT_SECRET){
-                const token = await jwt.sign({
-                    userId: currentUser._id
-                }, process.env.JWT_SECRET);
+                const token = await jwt.sign(currentUser._id, process.env.JWT_SECRET);
                 return token;
             } else{
                 throw new AppError(500, "Server config error");

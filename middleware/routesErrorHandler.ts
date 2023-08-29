@@ -37,6 +37,7 @@ export async function errorHandler(error: any, req: Request, res: Response, next
 
 
 export async function defaultErrorHandler(error: any, req: Request, res: Response, next: NextFunction){
+    console.log("INTERNAL SERVER ERROR", error);
     res.statusMessage = error.message;
     res.status(500);
     res.send();

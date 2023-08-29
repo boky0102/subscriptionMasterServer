@@ -1,4 +1,5 @@
 import { ObjectId } from "mongodb";
+import Subscription from "./subscription";
 
 export default class User{
     constructor(
@@ -6,5 +7,6 @@ export default class User{
         public password: string,
         public id?: ObjectId,
         public confirmPassword?: string,
+        public subscriptions?: [Subscription]
     ) {}
 }
