@@ -22,7 +22,7 @@ export async function insertNewSubscription(subscription: Subscription, userId: 
     const currentUserId = new ObjectId(userId.toString());
     
     await collections.user?.updateOne({_id: currentUserId}, {
-        $push: {subscriptions: {subscription}}
+        $push: {subscriptions: subscription}
     });
 }
 
