@@ -1,4 +1,4 @@
-import { ObjectId } from "mongodb";
+import { Collection, ObjectId } from "mongodb";
 import { AppError } from "../middleware/routesErrorHandler";
 import Subscription from "../modules/subscription";
 import User from "../modules/user";
@@ -24,5 +24,30 @@ export async function insertNewSubscription(subscription: Subscription, userId: 
     await collections.user?.updateOne({_id: currentUserId}, {
         $push: {subscriptions: subscription}
     });
+}
+
+export async function getAllSubscriptions(userId: JwtPayload){
+    
+    const currentUserId = new ObjectId(userId.toString());
+    if(currentUserId){
+        if(collections.user){
+
+            const userDocument = await collections.user.findOne<User>({_id: currentUserId})
+            
+            if(userDocument){
+                return userDocument.subscriptions;
+            } else {
+                throw new AppError(400, "Bad request");
+            }
+            
+        } else{
+            throw new AppError(500, "INTERNAL SERVER ERROR - DATABASE");
+        }
+        
+    } else{
+        throw new AppError(400, "JWT NOT SET UP ON SERVER");
+    }
+    
+
 }
 

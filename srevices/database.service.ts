@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import * as mongoDB from "mongodb";
+import User from '../modules/user';
 
 export const collections: { user?: mongoDB.Collection } = {}
 
@@ -12,7 +13,7 @@ export async function connectToDatabase(){
 
         const db: mongoDB.Db = client.db("subscription");
 
-        const userCollection: mongoDB.Collection = db.collection("user");
+        const userCollection = db.collection("user");
 
     collections.user = userCollection;
         

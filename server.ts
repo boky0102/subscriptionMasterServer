@@ -11,6 +11,7 @@ import addSubscription from './controllers/addSubscription';
 import { connectToDatabase, collections } from './srevices/database.service';
 import { defaultErrorHandler, errorHandler } from './middleware/routesErrorHandler';
 import { validateUserInput } from './srevices/user.service';
+import { getSubscriptionsController } from './controllers/subscription.controller';
 
 const router = express.Router();
 
@@ -41,6 +42,7 @@ connectToDatabase()
         router.post("/login", login);
         router.get("/logout", isAuthenticated, logoutController);
         router.post("/newsubscription", isAuthenticated , addSubscription);
+        router.get("/subscriptions", isAuthenticated, getSubscriptionsController);
         app.use("/", router);
 
         app.use(errorHandler);
