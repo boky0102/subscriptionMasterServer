@@ -6,6 +6,7 @@ export default class Subscription{
         public dateAdded: Date,
         public renewalDate: Date,
         public chargeAmount: Number,
-        public category?: string
+        public category?: string,
+        public id?: ObjectId
     ){}
 }

@@ -7,10 +7,14 @@ import { JwtPayload } from "jsonwebtoken";
 export async function getSubscriptionsController(req: Request, res: Response, next: NextFunction){
     try{
         if(req.userId){
-            console.log("Controller JWT",req.userId);
             const userId= req.userId as JwtPayload;
             const subscriptions = await getAllSubscriptions(userId.userId);
-            res.send(subscriptions);
+            if(subscriptions){
+                res.send(subscriptions);
+            } else {
+                res.send([]);
+            }
+            
         }else{
             throw new AppError(400, "JWT COOKIE ISN'T SET UP");
         }

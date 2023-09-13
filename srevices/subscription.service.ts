@@ -20,6 +20,7 @@ export async function validateSubscriptionData(subscription: Subscription){
 export async function insertNewSubscription(subscription: Subscription, userId: JwtPayload){
 
     const currentUserId = new ObjectId(userId.toString());
+    subscription.id = new ObjectId
     
     await collections.user?.updateOne({_id: currentUserId}, {
         $push: {subscriptions: subscription}
