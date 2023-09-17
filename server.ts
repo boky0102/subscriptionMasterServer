@@ -12,7 +12,8 @@ import { connectToDatabase, collections } from './srevices/database.service';
 import { defaultErrorHandler, errorHandler } from './middleware/routesErrorHandler';
 import { validateUserInput } from './srevices/user.service';
 import { getSubscriptionsController } from './controllers/subscription.controller';
-
+import cron from 'node-cron';
+import { getAllSubscriptionsRenewalSoon } from './srevices/subscription.service';
 const router = express.Router();
 
 
@@ -31,6 +32,11 @@ const app: Express = express();
 
 connectToDatabase()
     .then(() => {
+        cron.schedule("01 13 * * *", () => {
+            console.log("ITS TIME");
+            getAllSubscriptionsRenewalSoon();
+        } )  // SCHEDULED EVENET EACH DAY AT 1:30 DURING NIGHT -> NOTIFICATIONS PUSH TO USERS
+
 
         console.log("database connected");
         app.use(cors(corsOptions));

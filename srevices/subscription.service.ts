@@ -4,6 +4,9 @@ import Subscription from "../modules/subscription";
 import User from "../modules/user";
 import { collections } from "./database.service";
 import { JwtPayload } from "jsonwebtoken";
+import { sendEmailTo } from "../controllers/Utilities/email.utilities";
+import { EmailInterface } from "../controllers/Utilities/email.utilities";
+import e from "cors";
 
 export async function validateSubscriptionData(subscription: Subscription){
     if(subscription.dateAdded === undefined || subscription.renewalDate === undefined || subscription.subscriptionName === undefined || subscription.chargeAmount === undefined){
@@ -50,5 +53,33 @@ export async function getAllSubscriptions(userId: JwtPayload){
     }
     
 
+}
+
+export async function getAllSubscriptionsRenewalSoon(){  //TREBA DORADA DA BUDE DRUGACIJE ZA SVAKOG USERA I IMPLEMENTACIJA ZA EMAIL
+    if(collections.user){
+        const currentDate = new Date();
+        const currentDay = currentDate.getDate();
+        console.log("CURRENT DAY", currentDay);
+        const cursor = await collections.user.find({});
+        for await (const doc of cursor){
+            doc.subscriptions.forEach((subscription: Subscription) => {
+                console.log(subscription);
+                const subscriptionRenewalDate = new Date(subscription.renewalDate);
+                const subscriptionRenewalDay = subscriptionRenewalDate.getDate();
+                if(subscriptionRenewalDay === currentDay + 1){
+                    const emailData: EmailInterface = {
+                        subscriptionName: subscription.subscriptionName,
+                        chargeAmount: subscription.chargeAmount,
+                        email: "boky.borna@gmail.com",
+                        username: doc.username
+                    }
+                    sendEmailTo(emailData);
+                }
+            })
+        }
+    } else {
+        throw new AppError(500, "Internal server errror");
+    }
+    
 }
 
