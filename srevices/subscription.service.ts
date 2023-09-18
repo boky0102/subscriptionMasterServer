@@ -42,7 +42,7 @@ export async function getAllSubscriptions(userId: JwtPayload){
                 return {
                     subscriptions: userDocument.subscriptions,
                     username: userDocument.username,
-                    userEmail: userDocument.email
+                    email: userDocument.email
                 };
             } else {
                 throw new AppError(400, "Bad request");
@@ -74,7 +74,7 @@ export async function getAllSubscriptionsRenewalSoon(){  //TREBA DORADA DA BUDE 
                     const emailData: EmailInterface = {
                         subscriptionName: subscription.subscriptionName,
                         chargeAmount: subscription.chargeAmount,
-                        email: "boky.borna@gmail.com",
+                        email: doc.email,
                         username: doc.username
                     }
                     sendEmailTo(emailData);
