@@ -14,6 +14,7 @@ import { validateUserInput } from './srevices/user.service';
 import { getSubscriptionsController } from './controllers/subscription.controller';
 import cron from 'node-cron';
 import { getAllSubscriptionsRenewalSoon } from './srevices/subscription.service';
+import { userUpdateController } from './controllers/userUpdate.controller';
 const router = express.Router();
 
 
@@ -49,6 +50,7 @@ connectToDatabase()
         router.get("/logout", isAuthenticated, logoutController);
         router.post("/newsubscription", isAuthenticated , addSubscription);
         router.get("/subscriptions", isAuthenticated, getSubscriptionsController);
+        router.put("/settings", isAuthenticated ,userUpdateController);
         app.use("/", router);
 
         app.use(errorHandler);

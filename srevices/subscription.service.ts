@@ -39,7 +39,11 @@ export async function getAllSubscriptions(userId: JwtPayload){
             const userDocument = await collections.user.findOne<User>({_id: currentUserId})
             
             if(userDocument){
-                return userDocument.subscriptions;
+                return {
+                    subscriptions: userDocument.subscriptions,
+                    username: userDocument.username,
+                    userEmail: userDocument.email
+                };
             } else {
                 throw new AppError(400, "Bad request");
             }

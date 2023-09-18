@@ -4,7 +4,9 @@ import User from "../modules/user";
 import { collections } from "./database.service";
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
-import 'dotenv/config'
+import 'dotenv/config';
+import { ObjectId } from "mongodb";
+import { JwtPayload } from "jsonwebtoken";
 
 
 export async function validateUserInput(req: Request, res: Response, next: NextFunction){
@@ -87,6 +89,43 @@ export async function validateLoginData(userData: User){
     } else{
         throw new AppError(400, "User doesn't exist");
     }
+
+}
+
+async function validateEmail(email: string){
+    const regExp = /^(?!\.)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return regExp.test(email);
+}
+
+export async function updateUserEmail(reqUserId: JwtPayload, email: string){
+    try{
+        const validEmail = await validateEmail(email);
+        const userId = new ObjectId(reqUserId.userId);
+        if(validEmail){
+            console.log("INSETING ", email, userId);
+            const user = await collections.user?.updateOne({
+                _id: userId
+            }, {
+                "$set" : {
+                    email: email
+                }
+            });
+            if(user){
+                return true
+            } else{
+                throw new AppError(500, "User data couldn't be updated")
+            }
+
+        } else {
+            throw new AppError(400, "Bad request - invalid email address");
+        }
+
+
+    } catch(error){
+        console.log(error);
+        throw new AppError(500, "Internal server error");
+    }
+    
 
 }
 

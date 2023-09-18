@@ -7,6 +7,7 @@ export default class Subscription{
         public renewalDate: Date,
         public chargeAmount: number,
         public category?: string,
-        public id?: ObjectId
+        public id?: ObjectId,
+        public emailNotification?: boolean
     ){}
 }

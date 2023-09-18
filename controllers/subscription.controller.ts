@@ -9,6 +9,7 @@ export async function getSubscriptionsController(req: Request, res: Response, ne
         if(req.userId){
             const userId= req.userId as JwtPayload;
             const subscriptions = await getAllSubscriptions(userId.userId);
+            console.log(subscriptions);
             if(subscriptions){
                 res.send(subscriptions);
             } else {
