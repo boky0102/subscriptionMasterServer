@@ -63,27 +63,60 @@ export async function getAllSubscriptionsRenewalSoon(){  //TREBA DORADA DA BUDE 
     if(collections.user){
         const currentDate = new Date();
         const currentDay = currentDate.getDate();
-        console.log("CURRENT DAY", currentDay);
         const cursor = await collections.user.find({});
         for await (const doc of cursor){
-            doc.subscriptions.forEach((subscription: Subscription) => {
-                console.log(subscription);
-                const subscriptionRenewalDate = new Date(subscription.renewalDate);
-                const subscriptionRenewalDay = subscriptionRenewalDate.getDate();
-                if(subscriptionRenewalDay === currentDay + 1){
-                    const emailData: EmailInterface = {
-                        subscriptionName: subscription.subscriptionName,
-                        chargeAmount: subscription.chargeAmount,
-                        email: doc.email,
-                        username: doc.username
+            if(doc.email){
+                doc.subscriptions.forEach((subscription: Subscription) => {
+                    const subscriptionRenewalDate = new Date(subscription.renewalDate);
+                    const subscriptionRenewalDay = subscriptionRenewalDate.getDate();
+                    if(subscriptionRenewalDay === currentDay + 1){
+                        const emailData: EmailInterface = {
+                            subscriptionName: subscription.subscriptionName,
+                            chargeAmount: subscription.chargeAmount,
+                            email: doc.email,
+                            username: doc.username
+                        }
+                        sendEmailTo(emailData);
                     }
-                    sendEmailTo(emailData);
-                }
-            })
+                })
+            } else {
+                console.log("USER :", doc.username, " NO EMAIL");
+            }
+            
         }
     } else {
         throw new AppError(500, "Internal server errror");
     }
     
+}
+
+export async function MarkSubscriptionNotification(userId: JwtPayload, subscriptionId: string){
+    const userIdDB = new ObjectId(userId.userId);
+    const user = await collections.user?.findOne<User>({_id: userIdDB});
+    const updatedSubscriptions = user?.subscriptions?.map((subscription) => {
+        if(subscription.id?.toString() === subscriptionId){
+            if(subscription.emailNotification === undefined || subscription.emailNotification === false){
+                subscription.emailNotification = true;
+            } else{
+                subscription.emailNotification = false;
+            }
+            return subscription
+        } else {
+            return subscription
+        }
+    })
+
+    const subscriptionUpdated = await collections.user?.updateOne({
+        _id: userIdDB
+    }, {
+        "$set" : {
+            subscriptions: updatedSubscriptions
+        }
+    })
+    if(subscriptionUpdated){
+        return true
+    } else {
+        throw new AppError(500, "Internal server error - couldn't update subscriptions");
+    }
 }
 
