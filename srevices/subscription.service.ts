@@ -120,3 +120,29 @@ export async function MarkSubscriptionNotification(userId: JwtPayload, subscript
     }
 }
 
+export async function deleteOneSubscription(userId: JwtPayload, subscriptionId: string){
+    const userIdDB = new ObjectId(userId.userId);
+    const user = await collections.user?.findOne<User>({_id: userIdDB});
+    let foundFlag = false;
+    const filteredSubscriptionsArray = user?.subscriptions?.filter((subscription) => {
+        if(subscription.id?.toString() !== subscriptionId){
+            return subscription
+        } else{
+            foundFlag = true;
+        }
+    })
+    const userUpdated = await collections.user?.updateOne({_id: userIdDB},{
+        "$set" : {
+            subscriptions: filteredSubscriptionsArray
+        }
+    });
+    if(!foundFlag){
+        throw new AppError(404, "Subscription not found");
+    }
+    if(userUpdated){
+        return true
+    } else {
+        return false
+    }  
+}
+
