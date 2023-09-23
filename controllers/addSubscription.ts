@@ -13,7 +13,8 @@ async function addSubscription(req: express.Request, res: express.Response, next
             subscriptionName: req.body.subscriptionName,
             renewalDate: new Date(req.body.renewalDate),
             dateAdded: new Date(req.body.startDate),
-            chargeAmount: req.body.chargeAmount
+            chargeAmount: req.body.chargeAmount,
+            emailNotification: req.body.emailNotification
         }
 
         const isSubscriptionValid = await validateSubscriptionData(newSubscription);
