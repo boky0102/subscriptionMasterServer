@@ -12,7 +12,7 @@ async function addSubscription(req: express.Request, res: express.Response, next
         const newSubscription: Subscription = {
             subscriptionName: req.body.subscriptionName,
             renewalDate: new Date(req.body.renewalDate),
-            dateAdded: new Date(req.body.startDate),
+            dateAdded: new Date(req.body.dateAdded),
             chargeAmount: req.body.chargeAmount,
             emailNotification: req.body.emailNotification
         }
