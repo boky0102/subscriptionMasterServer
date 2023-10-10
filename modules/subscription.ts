@@ -10,6 +10,7 @@ export default class Subscription{
         public chargeAmount: number,
         public category?: subscriptionCategories,
         public id?: ObjectId,
-        public emailNotification?: boolean
+        public emailNotification?: boolean,
+        public freeTrial?: boolean
     ){}
 }

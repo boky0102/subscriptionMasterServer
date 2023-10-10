@@ -15,7 +15,8 @@ async function addSubscription(req: express.Request, res: express.Response, next
             dateAdded: new Date(req.body.dateAdded),
             chargeAmount: req.body.chargeAmount,
             emailNotification: req.body.emailNotification,
-            category: req.body.category
+            category: req.body.category,
+            freeTrial: req.body.freeTrial
         }
 
         const isSubscriptionValid = await validateSubscriptionData(newSubscription);
