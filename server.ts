@@ -38,6 +38,8 @@ connectToDatabase()
             getAllSubscriptionsRenewalSoon();
         } )  // SCHEDULED EVENET EACH DAY AT 1:30 DURING NIGHT -> NOTIFICATIONS PUSH TO USERS
 
+        
+
 
         console.log("database connected");
         app.use(cors(corsOptions));

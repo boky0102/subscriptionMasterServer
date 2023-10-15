@@ -9,11 +9,12 @@ import { ObjectId } from "mongodb";
 import { JwtPayload } from "jsonwebtoken";
 
 
+
+
 export async function validateUserInput(req: Request, res: Response, next: NextFunction){
     try{
 
         if(req.body.username && req.body.password && req.body.confirmPassword){
-            
             const newUser: User = {
                 username: req.body.username,
                 password: req.body.password,
@@ -52,12 +53,33 @@ export async function createUser(userData: User){
     });
 
     if(!userExists){
+        const COLORS = ['#7E57F2', '#F073BE', '#63ABFA', '#EDA751', '#79F56E', '#F4F570', '#F5DE6C', '#59F5CA'];
+        const categories: subscriptionCategories[] = [
+            'Streaming service',
+            'Gaming',
+            'Clothing',
+            'Food',
+            'Utility',
+            'Education',
+            'Software',
+            'Other',
+       ];
+
+       const categoriesColorsArray: UserCategoryColors[] = [];
+       categories.forEach((category, index) => {
+            const categoryObject: UserCategoryColors = {
+                category: category,
+                color: COLORS[index]
+            }
+            categoriesColorsArray.push(categoryObject);
+       })
 
         const hash = await bcrypt.hash(userData.password, 10);
         const insertedUser = await collections.user?.insertOne({
             username: userData.username,
-            password: hash
-        })
+            password: hash,
+            userCategoryColors: categoriesColorsArray
+        } as User);
         
 
     } else {
