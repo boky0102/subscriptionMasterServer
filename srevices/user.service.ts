@@ -123,6 +123,7 @@ export async function updateUserEmail(reqUserId: JwtPayload, email: string){
     try{
         const validEmail = await validateEmail(email);
         const userId = new ObjectId(reqUserId.userId);
+
         if(validEmail){
             console.log("INSETING ", email, userId);
             const user = await collections.user?.updateOne({

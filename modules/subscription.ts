@@ -11,6 +11,7 @@ export default class Subscription{
         public category?: subscriptionCategories,
         public id?: ObjectId,
         public emailNotification?: boolean,
-        public freeTrial?: boolean
+        public freeTrial?: boolean,
+        public subscriptionStopped?: Date
     ){}
 }

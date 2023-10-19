@@ -11,7 +11,7 @@ import addSubscription from './controllers/addSubscription';
 import { connectToDatabase, collections } from './srevices/database.service';
 import { defaultErrorHandler, errorHandler } from './middleware/routesErrorHandler';
 import { validateUserInput } from './srevices/user.service';
-import { deleteSubscription, getSubscriptionsController, putSubscriptionNotification } from './controllers/subscription.controller';
+import { deleteSubscription, getSubscriptionsController, putSubscriptionNotification, subscriptionStop } from './controllers/subscription.controller';
 import cron from 'node-cron';
 import { getAllSubscriptionsRenewalSoon } from './srevices/subscription.service';
 import { userUpdateController } from './controllers/userUpdate.controller';
@@ -55,6 +55,7 @@ connectToDatabase()
         router.put("/subscription", isAuthenticated, putSubscriptionNotification);
         router.delete("/subscription/:subscriptionId", isAuthenticated, deleteSubscription);
         router.put("/settings", isAuthenticated ,userUpdateController);
+        router.put("/subscription-stop", isAuthenticated, subscriptionStop);
         app.use("/", router);
 
         app.use(errorHandler);

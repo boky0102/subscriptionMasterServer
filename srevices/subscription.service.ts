@@ -42,7 +42,8 @@ export async function getAllSubscriptions(userId: JwtPayload){
                 return {
                     subscriptions: userDocument.subscriptions,
                     username: userDocument.username,
-                    email: userDocument.email
+                    email: userDocument.email,
+                    userCategoryColor: userDocument.userCategoryColors
                 };
             } else {
                 throw new AppError(400, "Bad request");
@@ -146,3 +147,24 @@ export async function deleteOneSubscription(userId: JwtPayload, subscriptionId: 
     }  
 }
 
+export async function subscriptionStopped(userId: JwtPayload, subscriptionId: string){
+    const userIDDB = new ObjectId(userId.userId);
+    const user = await collections.user?.findOne<User>({_id: userIDDB});
+    const updatedSubscriptions = user?.subscriptions?.map((subscription) => {
+        if(subscription.id?.toString() === subscriptionId){
+            subscription.subscriptionStopped = new Date();
+            return subscription
+        } else return subscription
+    });
+
+    const userUpdated = await collections.user?.updateOne({_id: userIDDB}, {
+        "$set" : {
+            subscriptions: updatedSubscriptions
+        }
+    })
+    if(!userUpdated){
+        throw new AppError(500, "Internal server error - can't update subscription");
+    } else {
+        return true
+    }
+}
