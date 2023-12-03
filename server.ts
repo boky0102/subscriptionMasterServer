@@ -21,7 +21,7 @@ const router = express.Router();
 
 
 var corsOptions: cors.CorsOptions = {
-    origin: 'http://localhost:5173',
+    origin: [ "http://192.168.178.3:5173", 'http://localhost:5173'],
     credentials: true
 }
 //CONNECTING TO DB
@@ -56,10 +56,12 @@ connectToDatabase()
         router.delete("/subscription/:subscriptionId", isAuthenticated, deleteSubscription);
         router.put("/settings", isAuthenticated ,userUpdateController);
         router.put("/subscription-stop", isAuthenticated, subscriptionStop);
+    
         app.use("/", router);
 
         app.use(errorHandler);
         app.use(defaultErrorHandler);
+
 
 
 

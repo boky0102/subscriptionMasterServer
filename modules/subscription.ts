@@ -8,6 +8,7 @@ export default class Subscription{
         public dateAdded: Date,
         public renewalDate: Date,
         public chargeAmount: number,
+        public currency: string,
         public category?: subscriptionCategories,
         public id?: ObjectId,
         public emailNotification?: boolean,

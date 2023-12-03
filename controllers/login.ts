@@ -13,10 +13,14 @@ const login = async (req: express.Request, res: express.Response, next: express.
             password: req.body.password
         };
 
+        console.log(userData);
+
         const jwtToken = await validateLoginData(userData);
+
         res.cookie("jwt", jwtToken, {
             httpOnly: true,
-            secure: true
+            /* secure: true,  PRODUCTION*/ 
+            maxAge: 900000
         }).send();
         
     } catch(err){

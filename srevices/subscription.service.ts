@@ -9,14 +9,15 @@ import { EmailInterface } from "../controllers/Utilities/email.utilities";
 import e from "cors";
 
 export async function validateSubscriptionData(subscription: Subscription){
-    if(subscription.dateAdded === undefined || subscription.renewalDate === undefined || subscription.subscriptionName === undefined || subscription.chargeAmount === undefined){
-        throw new AppError(400, "All fields must be filled");
-    } else {
+    if(subscription.dateAdded !== undefined && subscription.renewalDate !== undefined && subscription.subscriptionName !== undefined && subscription.chargeAmount !== undefined && subscription.currency !== undefined){
         if(subscription.dateAdded instanceof Date && subscription.renewalDate instanceof Date){
             return subscription
         } else{
             throw new Error("Date fields must be in correct date format");
         }
+    } else {
+        
+        throw new AppError(400, "All fields must be filled");
     }
 }
 
@@ -152,7 +153,7 @@ export async function subscriptionStopped(userId: JwtPayload, subscriptionId: st
     const user = await collections.user?.findOne<User>({_id: userIDDB});
     const updatedSubscriptions = user?.subscriptions?.map((subscription) => {
         if(subscription.id?.toString() === subscriptionId){
-            subscription.subscriptionStopped = new Date();
+            subscription.subscriptionStopped = new Date(2023, 5, 20);
             return subscription
         } else return subscription
     });

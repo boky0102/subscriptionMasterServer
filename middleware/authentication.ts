@@ -7,6 +7,7 @@ import { AppError } from "./routesErrorHandler";
 async function isAuthenticated (req: express.Request, res: express.Response, next: express.NextFunction){
     try{
         const userToken = req.header("cookie")?.split("=")[1];
+        console.log(req.header("cookie"));
         console.log("user token", userToken);
         if(userToken && process.env.JWT_SECRET){
             jwt.verify(userToken, process.env.JWT_SECRET, (err, decoded) => {
