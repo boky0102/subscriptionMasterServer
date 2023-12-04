@@ -67,7 +67,6 @@ export async function subscriptionStop(req: Request, res: Response, next: NextFu
             const userId = req.userId as JwtPayload;
             const subscriptionUpdated = await subscriptionStopped(userId, req.body.subscriptionId);
             if(subscriptionUpdated){
-                console.log("Updated succesfully")
                 res.status(200).send();
             } else {
                 throw new AppError(500, "Internal server error - failed update");

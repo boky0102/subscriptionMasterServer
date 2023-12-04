@@ -34,7 +34,6 @@ const app: Express = express();
 connectToDatabase()
     .then(() => {
         cron.schedule("00 10 * * *", () => {
-            console.log("ITS TIME");
             getAllSubscriptionsRenewalSoon();
         } )  // SCHEDULED EVENET EACH DAY AT 1:30 DURING NIGHT -> NOTIFICATIONS PUSH TO USERS
 

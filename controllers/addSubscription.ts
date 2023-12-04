@@ -27,7 +27,6 @@ async function addSubscription(req: express.Request, res: express.Response, next
             if(req.userId){
 
                 const userId = req.userId as JwtPayload;
-                console.log("JWT payload",req.userId);
                 await insertNewSubscription(newSubscription, userId.userId); // used toString because userId is of type jwtPayload
                 res.status(200).send();
             } else{
