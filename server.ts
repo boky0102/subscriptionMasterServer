@@ -16,6 +16,7 @@ import cron from 'node-cron';
 import { getAllSubscriptionsRenewalSoon } from './srevices/subscription.service';
 import { userUpdateController } from './controllers/userUpdate.controller';
 import { getCurrencyData } from './utility/currency.utility';
+import { getCurrencyRatesController } from './controllers/currencies.controller';
 const router = express.Router();
 
 
@@ -37,6 +38,7 @@ connectToDatabase()
         cron.schedule("00 10 * * *", () => {
             getAllSubscriptionsRenewalSoon();
             getCurrencyData();
+            
         } )  // SCHEDULED EVENET EACH DAY AT 1:30 DURING NIGHT -> NOTIFICATIONS PUSH TO USERS
 
 
@@ -55,6 +57,7 @@ connectToDatabase()
         router.delete("/subscription/:subscriptionId", isAuthenticated, deleteSubscription);
         router.put("/settings", isAuthenticated ,userUpdateController);
         router.put("/subscription-stop", isAuthenticated, subscriptionStop);
+        router.get("/currencies", isAuthenticated, getCurrencyRatesController);
     
         app.use("/", router);
 

@@ -4,6 +4,7 @@ import "dotenv/config"
 import { writeFile } from "fs";
 
 export async function getCurrencyData(){
+    delete require.cache["./currencies.json"];
     const authHeader ="Bearer" + process.env.CURRENCY_API_KEY;
     axios.get("https://api.fxratesapi.com/latest", {headers: {
         Authorization: authHeader
@@ -21,3 +22,4 @@ export async function getCurrencyData(){
         throw new Error("Couldn't get currencies from external API");
     })
 }
+
