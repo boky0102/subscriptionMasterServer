@@ -90,8 +90,9 @@ export async function createUser(userData: User){
 
 
 export async function validateLoginData(userData: User){
-    
+    console.log(userData);
     const currentUser = await collections.user?.findOne({username: userData.username});
+    console.log(currentUser);
     if(currentUser){
         
         const isUserValid = await bcrypt.compare(userData.password, currentUser.password);
@@ -150,6 +151,20 @@ export async function updateUserEmail(reqUserId: JwtPayload, email: string){
     }
     
 
+}
+
+export async function updatePreferedCurrency(jwtPayload: JwtPayload ,currency: currencies){
+    
+    const {userId} = jwtPayload;
+    console.log(userId);
+    const updated = await collections.user?.updateOne({_id: userId}, {
+        $set: {
+            preferredCurrency: currency
+        }
+    });
+    if(updated?.acknowledged){
+        return true;
+    } else throw new AppError(500, "Internal server error - can't update user");
 }
 
 

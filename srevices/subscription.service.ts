@@ -44,7 +44,8 @@ export async function getAllSubscriptions(userId: JwtPayload){
                     subscriptions: userDocument.subscriptions,
                     username: userDocument.username,
                     email: userDocument.email,
-                    userCategoryColor: userDocument.userCategoryColors
+                    userCategoryColor: userDocument.userCategoryColors,
+                    preferredCurrency: userDocument.preferredCurrency
                 };
             } else {
                 throw new AppError(400, "Bad request");
