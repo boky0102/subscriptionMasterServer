@@ -24,6 +24,7 @@ export default class User{
         public email?: string,
         public id?: ObjectId,
         public confirmPassword?: string,
-        public subscriptions?: [Subscription]
+        public subscriptions?: [Subscription],
+        public preferredCurrency?: currencies
     ) {}
 }

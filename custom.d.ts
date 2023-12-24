@@ -21,5 +21,4 @@ interface UserCategoryColors {
         color: string
     }
 
-
-
+type currencies = keyof typeof import("./currencies.json")

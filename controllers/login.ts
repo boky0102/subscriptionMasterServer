@@ -13,6 +13,8 @@ const login = async (req: express.Request, res: express.Response, next: express.
             password: req.body.password
         };
 
+        
+
 
         const jwtToken = await validateLoginData(userData);
 
