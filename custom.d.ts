@@ -7,7 +7,7 @@ declare namespace Express{
 }
 
 type subscriptionCategories =
-     | 'Streaming service'
+     | 'Streaming'
      | 'Gaming'
      | 'Clothing'
      | 'Food'

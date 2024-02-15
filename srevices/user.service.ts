@@ -55,7 +55,7 @@ export async function createUser(userData: User){
     if(!userExists){
         const COLORS = ['#7E57F2', '#F073BE', '#63ABFA', '#EDA751', '#79F56E', '#F4F570', '#F5DE6C', '#59F5CA'];
         const categories: subscriptionCategories[] = [
-            'Streaming service',
+            'Streaming',
             'Gaming',
             'Clothing',
             'Food',
@@ -90,9 +90,7 @@ export async function createUser(userData: User){
 
 
 export async function validateLoginData(userData: User){
-    console.log(userData);
     const currentUser = await collections.user?.findOne({username: userData.username});
-    console.log(currentUser);
     if(currentUser){
         
         const isUserValid = await bcrypt.compare(userData.password, currentUser.password);
@@ -156,7 +154,6 @@ export async function updateUserEmail(reqUserId: JwtPayload, email: string){
 export async function updatePreferedCurrency(jwtPayload: JwtPayload ,currency: currencies){
     
     const {userId} = jwtPayload;
-    console.log(userId);
     const updated = await collections.user?.updateOne({_id: userId}, {
         $set: {
             preferredCurrency: currency

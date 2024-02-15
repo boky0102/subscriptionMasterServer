@@ -40,11 +40,18 @@ export async function getAllSubscriptions(userId: JwtPayload){
             const userDocument = await collections.user.findOne<User>({_id: currentUserId})
             
             if(userDocument){
+                const userColorData = userDocument.userCategoryColors?.reduce((acc, curr) => ({
+                    ...acc,
+                    [curr.category]: curr.color
+                }), {});
+                console.log(userDocument.userCategoryColors);
+                
+                console.log(userColorData);
                 return {
                     subscriptions: userDocument.subscriptions,
                     username: userDocument.username,
                     email: userDocument.email,
-                    userCategoryColor: userDocument.userCategoryColors,
+                    userCategoryColor: userColorData,
                     preferredCurrency: userDocument.preferredCurrency
                 };
             } else {
