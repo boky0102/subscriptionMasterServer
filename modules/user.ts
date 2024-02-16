@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 import Subscription from "./subscription";
 
 type subscriptionCategories =
-     | 'Streaming service'
+     | 'Streaming'
      | 'Gaming'
      | 'Clothing'
      | 'Food'

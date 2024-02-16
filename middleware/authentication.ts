@@ -21,7 +21,7 @@ async function isAuthenticated (req: express.Request, res: express.Response, nex
                 }
             })
         } else{
-            throw new AppError(400, "Cookie isn't set up");
+            throw new AppError(401, "Cookie isn't set up");
         }
 
 

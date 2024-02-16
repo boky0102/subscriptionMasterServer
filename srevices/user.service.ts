@@ -78,7 +78,8 @@ export async function createUser(userData: User){
         const insertedUser = await collections.user?.insertOne({
             username: userData.username,
             password: hash,
-            userCategoryColors: categoriesColorsArray
+            userCategoryColors: categoriesColorsArray,
+            preferredCurrency: "USD"
         } as User);
         
 
