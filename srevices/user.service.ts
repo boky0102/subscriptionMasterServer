@@ -10,6 +10,22 @@ import { JwtPayload } from "jsonwebtoken";
 
 
 
+type UserColorData = {
+    [key in subscriptionCategories]: string;
+};
+
+type subscriptionCategories =
+     | 'Streaming'
+     | 'Gaming'
+     | 'Clothing'
+     | 'Food'
+     | 'Utility'
+     | 'Education'
+     | 'Software'
+     | 'Other';
+
+
+
 
 export async function validateUserInput(req: Request, res: Response, next: NextFunction){
     try{
@@ -163,6 +179,46 @@ export async function updatePreferedCurrency(jwtPayload: JwtPayload ,currency: c
     if(updated?.acknowledged){
         return true;
     } else throw new AppError(500, "Internal server error - can't update user");
+}
+
+export async function updateUserColors(jwtPayload: JwtPayload, userColors: UserColorData){
+    const {userId} = jwtPayload;
+
+    const userIdDB = new ObjectId(userId);
+
+    const user = await collections.user?.findOne<User>({_id: userIdDB});
+    
+    const adjustedColorsArray = user?.userCategoryColors?.map((category) => {
+        if(userColors[category.category]){
+            return (
+                {
+                    ...category,
+                    color: userColors[category.category]
+                }
+            );
+        } else {
+            return category;
+        }
+    })
+
+    
+    const updatedUser = await collections.user?.updateOne({_id: userIdDB}, {
+        $set: {
+            userCategoryColors: adjustedColorsArray
+        }
+    });
+
+
+    if(updatedUser?.modifiedCount){
+        return true
+    } else{
+        throw new AppError(500, "Internal server error - updating color");
+    }
+
+    
+    
+
+    
 }
 
 

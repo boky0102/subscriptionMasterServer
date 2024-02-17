@@ -44,9 +44,7 @@ export async function getAllSubscriptions(userId: JwtPayload){
                     ...acc,
                     [curr.category]: curr.color
                 }), {});
-                console.log(userDocument.userCategoryColors);
-                
-                console.log(userColorData);
+
                 return {
                     subscriptions: userDocument.subscriptions,
                     username: userDocument.username,

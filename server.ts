@@ -14,7 +14,7 @@ import { validateUserInput } from './srevices/user.service';
 import { deleteSubscription, getSubscriptionsController, putSubscriptionNotification, subscriptionStop } from './controllers/subscription.controller';
 import cron from 'node-cron';
 import { getAllSubscriptionsRenewalSoon } from './srevices/subscription.service';
-import { changeCurrencyController, userUpdateController } from './controllers/userUpdate.controller';
+import { changeCurrencyController, changeUserColorController, userUpdateController } from './controllers/userUpdate.controller';
 import { getCurrencyData } from './utility/currency.utility';
 import { getCurrencyRatesController } from './controllers/currencies.controller';
 const router = express.Router();
@@ -59,6 +59,7 @@ connectToDatabase()
         router.put("/subscription-stop", isAuthenticated, subscriptionStop);
         router.get("/currencies", isAuthenticated, getCurrencyRatesController);
         router.post("/preferredCurrency", isAuthenticated, changeCurrencyController);
+        router.post("/change-color", isAuthenticated, changeUserColorController);
     
         app.use("/", router);
 

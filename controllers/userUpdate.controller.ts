@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { updatePreferedCurrency, updateUserEmail } from "../srevices/user.service";
+import { updatePreferedCurrency, updateUserColors, updateUserEmail } from "../srevices/user.service";
 import { AppError } from "../middleware/routesErrorHandler";
 import { JwtPayload } from "jsonwebtoken";
 
@@ -9,7 +9,6 @@ export async function userUpdateController(req: Request, res: Response, next: Ne
         if(req.userId){
             const userUpdated = await updateUserEmail(userId,req.body.email);
             if(userUpdated){
-                console.log("User updated", userUpdated);
                 res.status(200).send();
             } else {
                 throw new AppError(500, "Didnt manage to update user on server");
@@ -39,4 +38,19 @@ export async function changeCurrencyController(req: Request, res: Response, next
     }
     
 
+}
+
+
+export async function changeUserColorController(req: Request, res: Response, next: NextFunction){
+    try{
+        const userId = req.userId as JwtPayload;
+        const userColorData = req.body;
+        console.log("Request data" , userColorData);
+        await updateUserColors(userId, userColorData);
+        res.status(200).send();
+
+
+    }catch(error){
+        next(error);
+    }
 }
