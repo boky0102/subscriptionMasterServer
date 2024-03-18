@@ -23,7 +23,7 @@ const router = express.Router();
 
 
 var corsOptions: cors.CorsOptions = {
-    origin: [ "http://192.168.178.3:5173", 'http://localhost:5173'],
+    origin: [ "http://192.168.178.4:5173", 'http://localhost:5173'],
     credentials: true
 }
 //CONNECTING TO DB
