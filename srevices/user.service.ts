@@ -171,12 +171,18 @@ export async function updateUserEmail(reqUserId: JwtPayload, email: string){
 export async function updatePreferedCurrency(jwtPayload: JwtPayload ,currency: currencies){
     
     const {userId} = jwtPayload;
-    const updated = await collections.user?.updateOne({_id: userId}, {
+    const userObjectId = new ObjectId(userId);
+    console.log(currency);
+    console.log(userId);
+    const updated = await collections.user?.updateOne({_id: userObjectId}, {
         $set: {
             preferredCurrency: currency
         }
     });
-    if(updated?.acknowledged){
+
+    console.log(updated);
+
+    if(updated?.modifiedCount){
         return true;
     } else throw new AppError(500, "Internal server error - can't update user");
 }
