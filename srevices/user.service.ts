@@ -7,7 +7,9 @@ import jwt from 'jsonwebtoken';
 import 'dotenv/config';
 import { ObjectId } from "mongodb";
 import { JwtPayload } from "jsonwebtoken";
-
+import { randomBytes } from 'node:crypto';
+import { getRandomToken } from "../utility/crypto.utility";
+import { sendVerificationEmail } from "../utility/email.utilities";
 
 
 type UserColorData = {
@@ -135,22 +137,29 @@ async function validateEmail(email: string){
     return regExp.test(email);
 }
 
-export async function updateUserEmail(reqUserId: JwtPayload, email: string){
+export async function updateUserEmail(reqUserId: JwtPayload, email: string, username: string){
     try{
         const validEmail = await validateEmail(email);
         const userId = new ObjectId(reqUserId.userId);
 
         if(validEmail){
             console.log("INSETING ", email, userId);
+
+            const token = await getRandomToken();
+
             const user = await collections.user?.updateOne({
                 _id: userId
             }, {
                 "$set" : {
-                    email: email
+                    email: email,
+                    emailVerified: false,
+                    verificationKey: token
                 }
+
             });
             if(user){
-                return true
+                await sendVerificationEmail(email, token, username);
+                return true;
             } else{
                 throw new AppError(500, "User data couldn't be updated")
             }
@@ -165,8 +174,36 @@ export async function updateUserEmail(reqUserId: JwtPayload, email: string){
         throw new AppError(500, "Internal server error");
     }
     
-
 }
+
+export async function validateEmailVerification(username: string, emailToken: string){
+    const user = await collections.user?.findOne({username: username});
+    if(!user){
+        throw new AppError(404, "Can't find user with given email and token. Try again later.");
+    }else{
+        console.log(emailToken);
+        console.log(user.verificationKey);
+        if(emailToken === user.verificationKey){
+            
+            const userUpdated = await collections.user?.updateOne({username: username}, {
+                $set: {
+                    emailVerified: true,
+                    verificationKey: undefined
+                }
+            })
+
+            if(userUpdated?.modifiedCount){
+                return true;
+            } else{
+                throw new AppError(500, "User values can't be adjusted");
+            }
+
+        } else{
+            throw new AppError(400, "Verification failed");
+        }
+    }
+}
+
 
 export async function updatePreferedCurrency(jwtPayload: JwtPayload ,currency: currencies){
     

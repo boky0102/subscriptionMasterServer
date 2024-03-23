@@ -4,9 +4,8 @@ import Subscription from "../modules/subscription";
 import User from "../modules/user";
 import { collections } from "./database.service";
 import { JwtPayload } from "jsonwebtoken";
-import { sendEmailTo } from "../controllers/Utilities/email.utilities";
-import { EmailInterface } from "../controllers/Utilities/email.utilities";
-import e from "cors";
+import { sendEmailTo } from "../utility/email.utilities";
+import { EmailInterface } from "../utility/email.utilities";
 
 export async function validateSubscriptionData(subscription: Subscription){
     if(subscription.dateAdded !== undefined && subscription.renewalDate !== undefined && subscription.subscriptionName !== undefined && subscription.chargeAmount !== undefined && subscription.currency !== undefined){
@@ -40,10 +39,16 @@ export async function getAllSubscriptions(userId: JwtPayload){
             const userDocument = await collections.user.findOne<User>({_id: currentUserId})
             
             if(userDocument){
-                const userColorData = userDocument.userCategoryColors?.reduce((acc, curr) => ({
-                    ...acc,
-                    [curr.category]: curr.color
-                }), {});
+                let userColorData;
+                if(Array.isArray(userDocument.userCategoryColors)){
+                    userColorData = userDocument.userCategoryColors?.reduce((acc, curr) => ({
+                        ...acc,
+                        [curr.category]: curr.color
+                    }), {});
+                } else{
+                    userColorData = userDocument.userCategoryColors;
+                }
+                
 
                 return {
                     subscriptions: userDocument.subscriptions,

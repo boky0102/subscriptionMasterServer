@@ -22,6 +22,8 @@ export default class User{
         public password: string,
         public userCategoryColors?: UserCategoryColors[],
         public email?: string,
+        public emailVerified?: boolean,
+        public verificationKey?: string,
         public id?: ObjectId,
         public confirmPassword?: string,
         public subscriptions?: [Subscription],

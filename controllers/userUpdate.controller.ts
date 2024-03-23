@@ -7,7 +7,7 @@ export async function userUpdateController(req: Request, res: Response, next: Ne
     try{
         const userId = req.userId as JwtPayload;
         if(req.userId){
-            const userUpdated = await updateUserEmail(userId,req.body.email);
+            const userUpdated = await updateUserEmail(userId,req.body.email, req.body.username);
             if(userUpdated){
                 res.status(200).send();
             } else {
