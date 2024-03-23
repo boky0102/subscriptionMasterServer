@@ -17,6 +17,7 @@ import { getAllSubscriptionsRenewalSoon } from './srevices/subscription.service'
 import { changeCurrencyController, changeUserColorController, userUpdateController } from './controllers/userUpdate.controller';
 import { getCurrencyData } from './utility/currency.utility';
 import { getCurrencyRatesController } from './controllers/currencies.controller';
+import mailgun from 'mailgun-js';
 const router = express.Router();
 
 
@@ -33,11 +34,16 @@ const port = 3000
 
 const app: Express = express();
 
+
+
+
+
+
 connectToDatabase()
     .then(() => {
-        cron.schedule("00 10 * * *", () => {
+        cron.schedule("42 11 * * *", () => {
             getAllSubscriptionsRenewalSoon();
-            getCurrencyData();
+            /* getCurrencyData(); */
             
         } )  // SCHEDULED EVENET EACH DAY AT 1:30 DURING NIGHT -> NOTIFICATIONS PUSH TO USERS
 

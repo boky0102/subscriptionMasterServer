@@ -1,14 +1,15 @@
 import nodemailer from 'nodemailer';
 import 'dotenv/config'
 
-var transporter = nodemailer.createTransport({
-    service: "gmail",
+const transporter = nodemailer.createTransport({
+    host: "smtp.mailersend.net",
+    port: 587,
+    secure: false, // Use `true` for port 465, `false` for all other ports
     auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD
+      user: process.env.EMAIL_SMTP_USER,
+      pass: process.env.EMAIL_SMTP_PASSWORD,
     },
-    from: process.env.EMAIL_USERNAME
-});
+  });
 
 export interface EmailInterface{
     email: string,
@@ -18,13 +19,16 @@ export interface EmailInterface{
 }
 
 export async function sendEmailTo(userEmail: EmailInterface){
+
+    
     const mailOptions = {
-        from: process.env.EMAIL_USERNAME,
+        from: "Subscription Master <MS_TpWBHh@trial-0r83ql3jp5zgzw1j.mlsender.net>",
         to: userEmail.email,
         subject: "Subscription notification",
         text: "Subscription renewal email alert",
         html: getHtmlEmail(userEmail.subscriptionName, userEmail.chargeAmount, userEmail.username)
     }
+    
 
     transporter.sendMail(mailOptions, (err, info) => {
         if(err){

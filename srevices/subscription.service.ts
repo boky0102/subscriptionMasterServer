@@ -77,6 +77,7 @@ export async function getAllSubscriptionsRenewalSoon(){  //TREBA DORADA DA BUDE 
                 doc.subscriptions.forEach((subscription: Subscription) => {
                     const subscriptionRenewalDate = new Date(subscription.renewalDate);
                     const subscriptionRenewalDay = subscriptionRenewalDate.getDate();
+                    console.log(`${subscription.subscriptionName} ----- renewal: ${subscriptionRenewalDay} ----- alertDay: ${currentDay + 1} --- notify: ${subscription.emailNotification}`);
                     if(subscriptionRenewalDay === currentDay + 1 && subscription.emailNotification === true){
                         const emailData: EmailInterface = {
                             subscriptionName: subscription.subscriptionName,
