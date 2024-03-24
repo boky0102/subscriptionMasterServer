@@ -17,7 +17,6 @@ import { getAllSubscriptionsRenewalSoon } from './srevices/subscription.service'
 import { changeCurrencyController, changeUserColorController, userUpdateController } from './controllers/userUpdate.controller';
 import { getCurrencyData } from './utility/currency.utility';
 import { getCurrencyRatesController } from './controllers/currencies.controller';
-import mailgun from 'mailgun-js';
 import { emailVerificationController } from './controllers/userverification.controller';
 const router = express.Router();
 
