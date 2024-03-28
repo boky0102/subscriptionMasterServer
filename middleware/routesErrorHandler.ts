@@ -23,6 +23,7 @@ export async function errorHandler(error: any, req: Request, res: Response, next
             next(error);
         } else{
               // If error is of type AppError
+            console.log(error);
             res.statusMessage = error.message;
             res.status(error.statusCode);
             res.send();

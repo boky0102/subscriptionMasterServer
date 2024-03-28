@@ -10,7 +10,6 @@ export async function emailVerificationController(req: Request, res: Response, n
         if(verified){
             res.status(200).send();
         }else{
-            console.log("Alo bre");
             throw new AppError(400, "Cant validate email");
         }
 

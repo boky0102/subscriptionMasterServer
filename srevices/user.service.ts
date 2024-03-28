@@ -138,15 +138,20 @@ async function validateEmail(email: string){
 }
 
 export async function updateUserEmail(reqUserId: JwtPayload, email: string, username: string){
-    try{
-        const validEmail = await validateEmail(email);
-        const userId = new ObjectId(reqUserId.userId);
+    const validEmail = await validateEmail(email);
+    const userId = new ObjectId(reqUserId.userId);
 
-        if(validEmail){
-            console.log("INSETING ", email, userId);
+    if(validEmail){
 
-            const token = await getRandomToken();
+        const token = await getRandomToken();
 
+        const userExist = await collections.user?.findOne<User>({
+            email: email
+        });
+
+        if(userExist){
+            throw new AppError(404, "Email is already used by another user");
+        } else {
             const user = await collections.user?.updateOne({
                 _id: userId
             }, {
@@ -163,16 +168,13 @@ export async function updateUserEmail(reqUserId: JwtPayload, email: string, user
             } else{
                 throw new AppError(500, "User data couldn't be updated")
             }
-
-        } else {
-            throw new AppError(400, "Bad request - invalid email address");
         }
 
 
-    } catch(error){
-        console.log(error);
-        throw new AppError(500, "Internal server error");
+    } else {
+        throw new AppError(400, "Bad request - invalid email address");
     }
+
     
 }
 
